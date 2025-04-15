@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppBar } from "../AppBar/AppBar";
+import Layout from "../Layout/Layout";
 import { RestrictedRoute } from "../RestrictedRoute";
 import { PrivateRoute } from "../PrivateRoute";
 import { selectIsRefreshing } from "../../redux/auth/selectors";
@@ -25,19 +25,18 @@ export default function App() {
   }, [dispatch]);
 
   return isRefreshing ? (
-    <strong>Refreshing user...</strong>
+    <strong>Getting user data please wait...</strong>
   ) : (
-    <div>
-      <AppBar />
-      <Suspense fallback={null}>
+    <Layout>
+      <Suspense fallback={<p>Loading page...</p>}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route
             path="/register"
             element={
               <RestrictedRoute
-                redirectTo="/contacts"
                 component={<RegistrationPage />}
+                redirectTo="/contacts"
               />
             }
           />
@@ -58,6 +57,6 @@ export default function App() {
           />
         </Routes>
       </Suspense>
-    </div>
+    </Layout>
   );
 }
